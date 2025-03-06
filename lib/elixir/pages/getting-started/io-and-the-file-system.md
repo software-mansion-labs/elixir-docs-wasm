@@ -17,7 +17,7 @@ yes or no? yes
 
 By default, functions in the `IO` module read from the standard input and write to the standard output. We can change that by passing, for example, `:stderr` as an argument (in order to write to the standard error device):
 
-```elixir
+```live-elixir
 iex> IO.puts(:stderr, "hello world")
 hello world
 :ok
@@ -84,7 +84,7 @@ Therefore, if you don't want to handle the error outcomes, prefer to use the fun
 
 The majority of the functions in the `File` module expect paths as arguments. Most commonly, those paths will be regular binaries. The `Path` module provides facilities for working with such paths:
 
-```elixir
+```live-elixir
 iex> Path.join("foo", "bar")
 "foo/bar"
 iex> Path.expand("~/hello")
@@ -142,14 +142,14 @@ In all of the examples above, we used binaries when writing to files. However, m
 One of the main reasons for using "iodata" and "chardata" is for performance. For example,
 imagine you need to greet someone in your application:
 
-```elixir
+```live-elixir
 name = "Mary"
 IO.puts("Hello " <> name <> "!")
 ```
 
 Given strings in Elixir are immutable, as most data structures, the example above will copy the string "Mary" into the new "Hello Mary!" string. While this is unlikely to matter for the short string as above, copying can be quite expensive for large strings! For this reason, the IO functions in Elixir allow you to pass instead a list of strings:
 
-```elixir
+```live-elixir
 name = "Mary"
 IO.puts(["Hello ", name, "!"])
 ```
@@ -160,33 +160,33 @@ Those lists are very useful because it can actually simplify the processing stri
 
 One option is to use `Enum.join/2` and convert the values to a string:
 
-```elixir
+```live-elixir
 iex> Enum.join(["apple", "banana", "lemon"], ",")
 "apple,banana,lemon"
 ```
 
 The above returns a new string by copying each value into the new string. However, with the knowledge in this section, we know that we can pass a list of strings to the IO/File functions. So instead we can do:
 
-```elixir
+```live-elixir
 iex> Enum.intersperse(["apple", "banana", "lemon"], ",")
 ["apple", ",", "banana", ",", "lemon"]
 ```
 
 "iodata" and "chardata" do not only contain strings, but they may contain arbitrary nested lists of strings too:
 
-```elixir
+```live-elixir
 iex> IO.puts(["apple", [",", "banana", [",", "lemon"]]])
 ```
 
 "iodata" and "chardata" may also contain integers. For example, we could print our comma separated list of values by using `?,` as separator, which is the integer representing a comma (`44`):
 
-```elixir
+```live-elixir
 iex> IO.puts(["apple", ?,, "banana", ?,, "lemon"])
 ```
 
 The difference between "iodata" and "chardata" is precisely what said integer represents. For iodata, the integers represent bytes. For chardata, the integers represent Unicode codepoints. For ASCII characters, the byte representation is the same as the codepoint representation, so it fits both classifications. However, the default IO device works with chardata, which means we can do:
 
-```elixir
+```live-elixir
 iex> IO.puts([?O, ?l, ?á, ?\s, "Mary", ?!])
 ```
 
@@ -198,24 +198,24 @@ Although this is a subtle difference, you only need to worry about these details
 
 Finally, there is one last construct called charlist, which [we discussed in earlier chapters](binaries-strings-and-charlists.md). Charlists are a special case of chardata where all values are integers representing Unicode codepoints. They can be created with the `~c` sigil:
 
-```elixir
+```live-elixir
 iex> ~c"hello"
 ~c"hello"
 ```
 
 Charlists mostly show up when interfacing with Erlang, as some Erlang APIs use charlist as their representation for strings. For this reason, any list containing printable ASCII codepoints will be printed as a charlist:
 
-```elixir
+```live-elixir
 iex> [?a, ?b, ?c]
 ~c"abc"
 ```
 
 We packed a lot into this small section, so let's break it down:
 
-  * iodata and chardata are lists of binaries and integers. Those binaries and integers can be arbitrarily nested inside lists. Their goal is to give flexibility and performance when working with IO devices and files;
+- iodata and chardata are lists of binaries and integers. Those binaries and integers can be arbitrarily nested inside lists. Their goal is to give flexibility and performance when working with IO devices and files;
 
-  * the choice between iodata and chardata depends on the encoding of the IO device. If the file is opened without encoding, the file expects iodata, and the functions in the `IO` module starting with `bin*` must be used. The default IO device (`:stdio`) and files opened with `:utf8` encoding expect chardata and work with the remaining functions in the `IO` module;
+- the choice between iodata and chardata depends on the encoding of the IO device. If the file is opened without encoding, the file expects iodata, and the functions in the `IO` module starting with `bin*` must be used. The default IO device (`:stdio`) and files opened with `:utf8` encoding expect chardata and work with the remaining functions in the `IO` module;
 
-  * charlists are a special case of chardata, where it exclusively uses a list of integers Unicode codepoints. They can be created with the `~c` sigil. Lists of integers are automatically printed using the `~c` sigil if all integers in a list represent printable ASCII codepoints.
+- charlists are a special case of chardata, where it exclusively uses a list of integers Unicode codepoints. They can be created with the `~c` sigil. Lists of integers are automatically printed using the `~c` sigil if all integers in a list represent printable ASCII codepoints.
 
 This finishes our tour of IO devices and IO related functionality. We have learned about three Elixir modules - `IO`, `File`, and `Path` - as well as how the VM uses processes for the underlying IO mechanisms and how to use `chardata` and `iodata` for IO operations.

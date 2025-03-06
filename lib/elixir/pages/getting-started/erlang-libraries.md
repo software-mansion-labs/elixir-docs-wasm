@@ -4,7 +4,7 @@ Elixir provides excellent interoperability with Erlang libraries. In fact, Elixi
 
 Erlang modules have a different naming convention than in Elixir and start in lowercase. In both cases, module names are atoms and we invoke functions by dispatching to the module name:
 
-```elixir
+```live-elixir
 iex> is_atom(String)
 true
 iex> String.first("hello")
@@ -21,7 +21,7 @@ As you grow more proficient in Elixir, you may want to explore the Erlang [STDLI
 
 The built-in Elixir String module handles binaries that are UTF-8 encoded. [The `:binary` module](`:binary`) is useful when you are dealing with binary data that is not necessarily UTF-8 encoded.
 
-```elixir
+```live-elixir
 iex> String.to_charlist("Ø")
 [216]
 iex> :binary.bin_to_list("Ø")
@@ -34,7 +34,7 @@ The above example shows the difference; the `String` module returns Unicode code
 
 Elixir does not contain a function similar to `printf` found in C and other languages. Luckily, the Erlang standard library functions `:io.format/2` and `:io_lib.format/2` may be used. The first formats to terminal output, while the second formats to an iolist. The format specifiers differ from `printf`, [refer to the Erlang documentation for details](`:io.format/2`).
 
-```elixir
+```live-elixir
 iex> :io.format("Pi is approximately given by:~10.3f~n", [:math.pi])
 Pi is approximately given by:     3.142
 :ok
@@ -46,7 +46,7 @@ iex> to_string(:io_lib.format("Pi is approximately given by:~10.3f~n", [:math.pi
 
 [The `:crypto` module](`:crypto`) contains hashing functions, digital signatures, encryption and more:
 
-```elixir
+```live-elixir
 iex> Base.encode16(:crypto.hash(:sha256, "Elixir"))
 "3315715A7A3AD57428298676C5AE465DADA38D951BDFAC9348A8A31E9C7401CB"
 ```
@@ -67,7 +67,7 @@ The [`:digraph`](`:digraph`) and [`:digraph_utils`](`:digraph_utils`) modules co
 
 Given three vertices, find the shortest path from the first to the last.
 
-```elixir
+```live-elixir
 iex> digraph = :digraph.new()
 iex> coords = [{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}]
 iex> [v0, v1, v2] = (for c <- coords, do: :digraph.add_vertex(digraph, c))
@@ -104,7 +104,7 @@ iex> :ets.i(table)
 
 The [`:math`](`:math`) module contains common mathematical operations covering trigonometry, exponential, and logarithmic functions.
 
-```elixir
+```live-elixir
 iex> angle_45_deg = :math.pi() * 45.0 / 180.0
 iex> :math.sin(angle_45_deg)
 0.7071067811865475
@@ -179,10 +179,10 @@ iex> :zlib.uncompress(compressed)
 
 If you want to get deeper into Erlang, here's a list of online resources that cover Erlang's fundamentals and its more advanced features:
 
-  * This [Erlang Syntax: A Crash Course](https://elixir-lang.org/crash-course.html) provides a concise intro to Erlang's syntax. Each code snippet is accompanied by equivalent code in Elixir. This is an opportunity for you to not only get some exposure to Erlang's syntax but also review what you learned about Elixir.
+- This [Erlang Syntax: A Crash Course](https://elixir-lang.org/crash-course.html) provides a concise intro to Erlang's syntax. Each code snippet is accompanied by equivalent code in Elixir. This is an opportunity for you to not only get some exposure to Erlang's syntax but also review what you learned about Elixir.
 
-  * Erlang's official website has a short [tutorial](https://www.erlang.org/course). There is a chapter with pictures briefly describing Erlang's primitives for [concurrent programming](https://www.erlang.org/course/concurrent_programming.html).
+- Erlang's official website has a short [tutorial](https://www.erlang.org/course). There is a chapter with pictures briefly describing Erlang's primitives for [concurrent programming](https://www.erlang.org/course/concurrent_programming.html).
 
-  * [Learn You Some Erlang for Great Good!](http://learnyousomeerlang.com/) is an excellent introduction to Erlang, its design principles, standard library, best practices, and much more. Once you have read through the crash course mentioned above, you'll be able to safely skip the first couple of chapters in the book that mostly deal with the syntax. When you reach [The Hitchhiker's Guide to Concurrency](http://learnyousomeerlang.com/the-hitchhikers-guide-to-concurrency) chapter, that's where the real fun starts.
+- [Learn You Some Erlang for Great Good!](http://learnyousomeerlang.com/) is an excellent introduction to Erlang, its design principles, standard library, best practices, and much more. Once you have read through the crash course mentioned above, you'll be able to safely skip the first couple of chapters in the book that mostly deal with the syntax. When you reach [The Hitchhiker's Guide to Concurrency](http://learnyousomeerlang.com/the-hitchhikers-guide-to-concurrency) chapter, that's where the real fun starts.
 
 Our last step is to take a look at existing Elixir (and Erlang) libraries you might use while debugging.

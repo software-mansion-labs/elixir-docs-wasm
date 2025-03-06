@@ -6,7 +6,7 @@ There are a number of ways to debug code in Elixir. In this chapter we will cove
 
 What makes `IO.inspect(item, opts \\ [])` really useful in debugging is that it returns the `item` argument passed to it without affecting the behavior of the original code. Let's see an example.
 
-```elixir
+```live-elixir
 (1..10)
 |> IO.inspect()
 |> Enum.map(fn x -> x * 2 end)
@@ -27,7 +27,7 @@ As you can see `IO.inspect/2` makes it possible to "spy" on values almost anywhe
 
 `IO.inspect/2` also provides the ability to decorate the output with a `label` option. The label will be printed before the inspected `item`:
 
-```elixir
+```live-elixir
 [1, 2, 3]
 |> IO.inspect(label: "before")
 |> Enum.map(&(&1 * 2))
@@ -63,7 +63,7 @@ See `IO.inspect/2` and `Inspect.Opts` respectively to learn more about the funct
 
 Elixir v1.14 introduced `dbg/2`. `dbg` is similar to `IO.inspect/2` but specifically tailored for debugging. It prints the value passed to it and returns it (just like `IO.inspect/2`), but it also prints the code and location.
 
-```elixir
+```live-elixir
 # In my_file.exs
 feature = %{name: :dbg, inspiration: "Rust"}
 dbg(feature)
@@ -81,7 +81,7 @@ Map.put(feature, :in_version, "1.14.0") #=> %{in_version: "1.14.0", inspiration:
 
 When talking about `IO.inspect/2`, we mentioned its usefulness when placed between steps of `|>` pipelines. `dbg` does it better: it understands Elixir code, so it will print values at _every step of the pipeline_.
 
-```elixir
+```live-elixir
 # In dbg_pipes.exs
 __ENV__.file
 |> String.split("/", trim: true)
@@ -175,14 +175,14 @@ Finally, remember you can also get a mini-overview of the runtime info by callin
 
 We have just scratched the surface of what the Erlang VM has to offer, for example:
 
-  * Alongside the observer application, Erlang also includes a [`:crashdump_viewer`](https://www.erlang.org/doc/man/crashdump_viewer.html) to view crash dumps
+- Alongside the observer application, Erlang also includes a [`:crashdump_viewer`](https://www.erlang.org/doc/man/crashdump_viewer.html) to view crash dumps
 
-  * Integration with OS level tracers, such as [Linux Trace Toolkit,](https://www.erlang.org/doc/apps/runtime_tools/lttng) [DTRACE,](https://www.erlang.org/doc/apps/runtime_tools/dtrace) and [SystemTap](https://www.erlang.org/doc/apps/runtime_tools/systemtap)
+- Integration with OS level tracers, such as [Linux Trace Toolkit,](https://www.erlang.org/doc/apps/runtime_tools/lttng) [DTRACE,](https://www.erlang.org/doc/apps/runtime_tools/dtrace) and [SystemTap](https://www.erlang.org/doc/apps/runtime_tools/systemtap)
 
-  * [Microstate accounting](http://www.erlang.org/doc/man/msacc.html) measures how much time the runtime spends in several low-level tasks in a short time interval
+- [Microstate accounting](http://www.erlang.org/doc/man/msacc.html) measures how much time the runtime spends in several low-level tasks in a short time interval
 
-  * Mix ships with many tasks under the `profile` namespace, such as `mix profile.cprof` and `mix profile.fprof`
+- Mix ships with many tasks under the `profile` namespace, such as `mix profile.cprof` and `mix profile.fprof`
 
-  * For more advanced use cases, we recommend the excellent [Erlang in Anger](https://www.erlang-in-anger.com/), which is available as a free ebook
+- For more advanced use cases, we recommend the excellent [Erlang in Anger](https://www.erlang-in-anger.com/), which is available as a free ebook
 
 Happy debugging!

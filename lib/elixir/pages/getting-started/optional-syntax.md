@@ -2,14 +2,14 @@
 
 In the previous chapters, we learned that the Elixir syntax allows developers to omit delimiters in a few occasions to make code more readable. For example, we learned that parentheses are optional:
 
-```elixir
+```live-elixir
 iex> length([1, 2, 3]) == length [1, 2, 3]
 true
 ```
 
 and that `do`-`end` blocks are equivalent to keyword lists:
 
-```elixir
+```live-elixir
 # do-end blocks
 iex> if true do
 ...>   :this
@@ -25,7 +25,7 @@ iex> if true, do: :this, else: :that
 
 Keyword lists use Elixir's regular notation for separating arguments, where we separate each key-value pair with commas, and each key is followed by `:`. In the `do`-blocks, we get rid of the colons, the commas, and separate each keyword by a newline. They are useful exactly because they remove the verbosity when writing blocks of code. Most of the time, we use the block syntax, but it is good to know they are equivalent.
 
-Those conveniences, which we call here "optional syntax", allow the language syntax core to be small, without sacrificing the readability and expressiveness of your code.  In this brief chapter, we will review the four rules provided by the language, using a short snippet as playground.
+Those conveniences, which we call here "optional syntax", allow the language syntax core to be small, without sacrificing the readability and expressiveness of your code. In this brief chapter, we will review the four rules provided by the language, using a short snippet as playground.
 
 ## Walk-through
 

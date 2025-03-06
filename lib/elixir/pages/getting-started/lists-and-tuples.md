@@ -6,7 +6,7 @@ In this chapter we will learn two of the most used collection data-types in Elix
 
 Elixir uses square brackets to specify a list of values. Values can be of any type:
 
-```elixir
+```live-elixir
 iex> [1, 2, true, 3]
 [1, 2, true, 3]
 iex> length([1, 2, 3])
@@ -15,18 +15,18 @@ iex> length([1, 2, 3])
 
 Two lists can be concatenated or subtracted using the `++/2` and `--/2` operators respectively:
 
-```elixir
+```live-elixir
 iex> [1, 2, 3] ++ [4, 5, 6]
 [1, 2, 3, 4, 5, 6]
 iex> [1, true, 2, false, 3, true] -- [true, false]
 [1, 2, 3, true]
 ```
 
-List operators never modify the existing list. Concatenating to or removing elements from a list returns a new list. We say that Elixir data structures are *immutable*. One advantage of immutability is that it leads to clearer code. You can freely pass the data around with the guarantee no one will mutate it in memory - only transform it.
+List operators never modify the existing list. Concatenating to or removing elements from a list returns a new list. We say that Elixir data structures are _immutable_. One advantage of immutability is that it leads to clearer code. You can freely pass the data around with the guarantee no one will mutate it in memory - only transform it.
 
 Throughout the tutorial, we will talk a lot about the head and tail of a list. The head is the first element of a list and the tail is the remainder of the list. They can be retrieved with the functions `hd/1` and `tl/1`. Let's assign a list to a variable and retrieve its head and tail:
 
-```elixir
+```live-elixir
 iex> list = [1, 2, 3]
 iex> hd(list)
 1
@@ -36,14 +36,14 @@ iex> tl(list)
 
 Getting the head or the tail of an empty list throws an error:
 
-```elixir
+```live-elixir
 iex> hd([])
 ** (ArgumentError) argument error
 ```
 
 Sometimes you will create a list and it will return a quoted value preceded by `~c`. For example:
 
-```elixir
+```live-elixir
 iex> [11, 12, 13]
 ~c"\v\f\r"
 iex> [104, 101, 108, 108, 111]
@@ -78,7 +78,7 @@ We will talk more about charlists in the ["Binaries, strings, and charlists"](bi
 
 Elixir uses curly brackets to define tuples. Like lists, tuples can hold any value:
 
-```elixir
+```live-elixir
 iex> {:ok, "hello"}
 {:ok, "hello"}
 iex> tuple_size({:ok, "hello"})
@@ -87,7 +87,7 @@ iex> tuple_size({:ok, "hello"})
 
 Tuples store elements contiguously in memory. This means accessing a tuple element by index or getting the tuple size is a fast operation. Indexes start from zero:
 
-```elixir
+```live-elixir
 iex> tuple = {:ok, "hello"}
 {:ok, "hello"}
 iex> elem(tuple, 1)
@@ -98,7 +98,7 @@ iex> tuple_size(tuple)
 
 It is also possible to put an element at a particular index in a tuple with `put_elem/3`:
 
-```elixir
+```live-elixir
 iex> tuple = {:ok, "hello"}
 {:ok, "hello"}
 iex> put_elem(tuple, 1, "world")
@@ -117,7 +117,7 @@ Lists are stored in memory as linked lists, meaning that each element in a list 
 
 Similarly, the performance of list concatenation depends on the length of the left-hand list:
 
-```elixir
+```live-elixir
 iex> list = [1, 2, 3]
 [1, 2, 3]
 
@@ -132,7 +132,7 @@ iex> list ++ [4]
 
 Tuples, on the other hand, are stored contiguously in memory. This means getting the tuple size or accessing an element by index is fast. On the other hand, updating or adding elements to tuples is expensive because it requires creating a new tuple in memory:
 
-```elixir
+```live-elixir
 iex> tuple = {:a, :b, :c, :d}
 {:a, :b, :c, :d}
 iex> put_elem(tuple, 2, :e)
@@ -143,7 +143,7 @@ Note, however, the elements themselves are not copied. When you update a tuple, 
 
 Those performance characteristics dictate the usage of those data structures. In a nutshell, lists are used when the number of elements returned may vary. Tuples have a fixed size. Let's see two examples from the `String` module:
 
-```elixir
+```live-elixir
 iex> String.split("hello world")
 ["hello", "world"]
 iex> String.split("hello beautiful world")
@@ -154,7 +154,7 @@ The `String.split/1` function breaks a string into a list of strings on every wh
 
 On the other hand, `String.split_at/2` splits a string in two parts at a given position. Since it always returns two entries, regardless of the input size, it returns tuples:
 
-```elixir
+```live-elixir
 iex> String.split_at("hello world", 3)
 {"hel", "lo world"}
 iex> String.split_at("hello world", -4)
@@ -170,11 +170,11 @@ iex> File.read("path/to/unknown/file")
 {:error, :enoent}
 ```
 
-If the path given to `File.read/1` exists, it returns a tuple with the atom `:ok` as the first element and the file contents as the second. Otherwise, it returns a tuple with `:error` and the error description. As we will soon learn, Elixir allows us to *pattern match* on tagged tuples and effortlessly handle both success and failure cases.
+If the path given to `File.read/1` exists, it returns a tuple with the atom `:ok` as the first element and the file contents as the second. Otherwise, it returns a tuple with `:error` and the error description. As we will soon learn, Elixir allows us to _pattern match_ on tagged tuples and effortlessly handle both success and failure cases.
 
 Given Elixir consistently follows those rules, the choice between lists and tuples get clearer as you learn and use the language. Elixir often guides you to do the right thing. For example, there is an `elem/2` function to access a tuple item:
 
-```elixir
+```live-elixir
 iex> tuple = {:ok, "hello"}
 {:ok, "hello"}
 iex> elem(tuple, 1)

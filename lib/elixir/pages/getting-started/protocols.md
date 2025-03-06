@@ -16,7 +16,7 @@ This is where protocols can help us: protocols allow us to extend the original b
 
 Here's how we could write the same `Utility.type/1` functionality as a protocol:
 
-```elixir
+```live-elixir
 defprotocol Utility do
   @spec type(t) :: String.t()
   def type(value)
@@ -33,7 +33,7 @@ end
 
 We define the protocol using `defprotocol/2` - its functions and specs may look similar to interfaces or abstract base classes in other languages. We can add as many implementations as we like using `defimpl/2`. The output is exactly the same as if we had a single module with multiple functions:
 
-```elixir
+```live-elixir
 iex> Utility.type("foo")
 "string"
 iex> Utility.type(123)
@@ -54,7 +54,7 @@ Even if we have type-specific functions for getting the size built into Elixir (
 
 The protocol definition would look like this:
 
-```elixir
+```live-elixir
 defprotocol Size do
   @doc "Calculates the size (and not the length!) of a data structure"
   def size(data)
@@ -63,7 +63,7 @@ end
 
 The `Size` protocol expects a function called `size` that receives one argument (the data structure we want to know the size of) to be implemented. We can now implement this protocol for the data structures that would have a compliant implementation:
 
-```elixir
+```live-elixir
 defimpl Size, for: BitString do
   def size(string), do: byte_size(string)
 end
@@ -81,7 +81,7 @@ We didn't implement the `Size` protocol for lists as there is no "size" informat
 
 Now with the protocol defined and implementations in hand, we can start using it:
 
-```elixir
+```live-elixir
 iex> Size.size("foo")
 3
 iex> Size.size({:ok, "hello"})
@@ -92,24 +92,24 @@ iex> Size.size(%{label: "some label"})
 
 Passing a data type that doesn't implement the protocol raises an error:
 
-```elixir
+```live-elixir
 iex> Size.size([1, 2, 3])
 ** (Protocol.UndefinedError) protocol Size not implemented for [1, 2, 3] of type List
 ```
 
 It's possible to implement protocols for all Elixir data types:
 
-  * `Atom`
-  * `BitString`
-  * `Float`
-  * `Function`
-  * `Integer`
-  * `List`
-  * `Map`
-  * `PID`
-  * `Port`
-  * `Reference`
-  * `Tuple`
+- `Atom`
+- `BitString`
+- `Float`
+- `Function`
+- `Integer`
+- `List`
+- `Map`
+- `PID`
+- `Port`
+- `Reference`
+- `Tuple`
 
 ## Protocols and structs
 
@@ -117,7 +117,7 @@ The power of Elixir's extensibility comes when protocols and structs are used to
 
 In the [previous chapter](structs.md), we have learned that although structs are maps, they do not share protocol implementations with maps. For example, `MapSet`s (sets based on maps) are implemented as structs. Let's try to use the `Size` protocol with a `MapSet`:
 
-```elixir
+```live-elixir
 iex> Size.size(%{})
 0
 iex> set = %MapSet{} = MapSet.new
@@ -128,7 +128,7 @@ iex> Size.size(set)
 
 Instead of sharing protocol implementation with maps, structs require their own protocol implementation. Since a `MapSet` has its size precomputed and accessible through `MapSet.size/1`, we can define a `Size` implementation for it:
 
-```elixir
+```live-elixir
 defimpl Size, for: MapSet do
   def size(set), do: MapSet.size(set)
 end
@@ -136,7 +136,7 @@ end
 
 If desired, you could come up with your own semantics for the size of your struct. Not only that, you could use structs to build more robust data types, like queues, and implement all relevant protocols, such as `Enumerable` and possibly `Size`, for this data type.
 
-```elixir
+```live-elixir
 defmodule User do
   defstruct [:name, :age]
 end
@@ -154,7 +154,7 @@ Manually implementing protocols for all types can quickly become repetitive and 
 
 Elixir allows us to derive a protocol implementation based on the `Any` implementation. Let's first implement `Any` as follows:
 
-```elixir
+```live-elixir
 defimpl Size, for: Any do
   def size(_), do: 0
 end
@@ -164,7 +164,7 @@ The implementation above is arguably not a reasonable one. For example, it makes
 
 However, should we be fine with the implementation for `Any`, in order to use such implementation we would need to tell our struct to explicitly derive the `Size` protocol:
 
-```elixir
+```live-elixir
 defmodule OtherUser do
   @derive [Size]
   defstruct [:name, :age]
@@ -177,7 +177,7 @@ When deriving, Elixir will implement the `Size` protocol for `OtherUser` based o
 
 Another alternative to `@derive` is to explicitly tell the protocol to fallback to `Any` when an implementation cannot be found. This can be achieved by setting `@fallback_to_any` to `true` in the protocol definition:
 
-```elixir
+```live-elixir
 defprotocol Size do
   @fallback_to_any true
   def size(data)
@@ -186,7 +186,7 @@ end
 
 As we said in the previous section, the implementation of `Size` for `Any` is not one that can apply to any data type. That's one of the reasons why `@fallback_to_any` is an opt-in behavior. For the majority of protocols, raising an error when a protocol is not implemented is the proper behavior. That said, assuming we have implemented `Any` as in the previous section:
 
-```elixir
+```live-elixir
 defimpl Size, for: Any do
   def size(_), do: 0
 end
@@ -200,7 +200,7 @@ Which technique is best between deriving and falling back to `Any` depends on th
 
 Elixir ships with some built-in protocols. In previous chapters, we have discussed the `Enum` module which provides many functions that work with any data structure that implements the `Enumerable` protocol:
 
-```elixir
+```live-elixir
 iex> Enum.map([1, 2, 3], fn x -> x * 2 end)
 [2, 4, 6]
 iex> Enum.reduce(1..3, 0, fn x, acc -> x + acc end)
@@ -209,21 +209,21 @@ iex> Enum.reduce(1..3, 0, fn x, acc -> x + acc end)
 
 Another useful example is the `String.Chars` protocol, which specifies how to convert a data structure to its human representation as a string. It's exposed via the `to_string` function:
 
-```elixir
+```live-elixir
 iex> to_string(:hello)
 "hello"
 ```
 
 Notice that string interpolation in Elixir calls the `to_string` function:
 
-```elixir
+```live-elixir
 iex> "age: #{25}"
 "age: 25"
 ```
 
 The snippet above only works because numbers implement the `String.Chars` protocol. Passing a tuple, for example, will lead to an error:
 
-```elixir
+```live-elixir
 iex> tuple = {1, 2, 3}
 {1, 2, 3}
 iex> "tuple: #{tuple}"
@@ -232,14 +232,14 @@ iex> "tuple: #{tuple}"
 
 When there is a need to "print" a more complex data structure, one can use the `inspect` function, based on the `Inspect` protocol:
 
-```elixir
+```live-elixir
 iex> "tuple: #{inspect(tuple)}"
 "tuple: {1, 2, 3}"
 ```
 
 The `Inspect` protocol is the protocol used to transform any data structure into a readable textual representation. This is what tools like IEx use to print results:
 
-```elixir
+```live-elixir
 iex> {1, 2, 3}
 {1, 2, 3}
 iex> %User{}
@@ -248,7 +248,7 @@ iex> %User{}
 
 Keep in mind that, by convention, whenever the inspected value starts with `#`, it is representing a data structure in non-valid Elixir syntax. This means the inspect protocol is not reversible as information may be lost along the way:
 
-```elixir
+```live-elixir
 iex> inspect &(&1+2)
 "#Function<6.71889879/1 in :erl_eval.expr/5>"
 ```

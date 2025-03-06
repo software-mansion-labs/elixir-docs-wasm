@@ -2,7 +2,7 @@
 
 We learned about maps [in earlier chapters](keywords-and-maps.md):
 
-```elixir
+```live-elixir
 iex> map = %{a: 1, b: 2}
 %{a: 1, b: 2}
 iex> map[:a]
@@ -17,7 +17,7 @@ Structs are extensions built on top of maps that provide compile-time checks and
 
 To define a struct, the `defstruct/1` construct is used:
 
-```elixir
+```live-elixir
 iex> defmodule User do
 ...>   defstruct name: "John", age: 27
 ...> end
@@ -27,16 +27,16 @@ The keyword list used with `defstruct` defines what fields the struct will have 
 
 We can now create `User` structs by using a syntax similar to the one used to create maps:
 
-```elixir
+```live-elixir
 iex> %User{}
 %User{age: 27, name: "John"}
 iex> %User{name: "Jane"}
 %User{age: 27, name: "Jane"}
 ```
 
-Structs provide *compile-time* guarantees that only the fields defined through `defstruct` will be allowed to exist in a struct:
+Structs provide _compile-time_ guarantees that only the fields defined through `defstruct` will be allowed to exist in a struct:
 
-```elixir
+```live-elixir
 iex> %User{oops: :field}
 ** (KeyError) key :oops not found expanding struct: User.__struct__/1
 ```
@@ -45,7 +45,7 @@ iex> %User{oops: :field}
 
 Structs share the same syntax for accessing and updating fields as maps of fixed keys:
 
-```elixir
+```live-elixir
 iex> john = %User{}
 %User{age: 27, name: "John"}
 iex> john.name
@@ -60,7 +60,7 @@ When using the update syntax (`|`), Elixir is aware that no new keys will be add
 
 Structs can also be used in pattern matching, both for matching on the value of specific keys as well as for ensuring that the matching value is a struct of the same type as the matched value.
 
-```elixir
+```live-elixir
 iex> %User{name: name} = john
 %User{age: 27, name: "John"}
 iex> name
@@ -73,7 +73,7 @@ iex> %User{} = %{}
 
 Structs are simply maps with a "special" field named `__struct__` that holds the name of the struct:
 
-```elixir
+```live-elixir
 iex> is_map(john)
 true
 iex> john.__struct__
@@ -82,7 +82,7 @@ User
 
 However, structs do not inherit any of the protocols that maps do. For example, you can neither enumerate nor access a struct:
 
-```elixir
+```live-elixir
 iex> john = %User{}
 %User{age: 27, name: "John"}
 iex> john[:name]
@@ -98,7 +98,7 @@ Structs alongside protocols provide one of the most important features for Elixi
 
 If you don't specify a default key value when defining a struct, `nil` will be assumed:
 
-```elixir
+```live-elixir
 iex> defmodule Product do
 ...>   defstruct [:name]
 ...> end
@@ -108,7 +108,7 @@ iex> %Product{}
 
 You can define a structure combining both fields with explicit default values, and implicit `nil` values. In this case you must first specify the fields which implicitly default to nil:
 
-```elixir
+```live-elixir
 iex> defmodule User do
 ...>   defstruct [:email, name: "John", age: 27]
 ...> end
@@ -118,7 +118,7 @@ iex> %User{}
 
 Doing it in reverse order will raise a syntax error:
 
-```elixir
+```live-elixir
 iex> defmodule User do
 ...>   defstruct [name: "John", age: 27, :email]
 ...> end
@@ -127,7 +127,7 @@ iex> defmodule User do
 
 You can also enforce that certain keys have to be specified when creating the struct via the `@enforce_keys` module attribute:
 
-```elixir
+```live-elixir
 iex> defmodule Car do
 ...>   @enforce_keys [:make]
 ...>   defstruct [:model, :make]

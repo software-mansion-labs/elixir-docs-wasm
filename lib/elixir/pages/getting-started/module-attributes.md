@@ -12,7 +12,7 @@ Let's check these examples.
 
 Elixir brings the concept of module attributes from Erlang. For example:
 
-```elixir
+```live-elixir
 defmodule MyServer do
   @moduledoc "My server code."
 end
@@ -20,16 +20,16 @@ end
 
 In the example above, we are defining the module documentation by using the module attribute syntax. Elixir has a handful of reserved attributes. Here are a few of them, the most commonly used ones:
 
-  * `@moduledoc` — provides documentation for the current module.
-  * `@doc` — provides documentation for the function or macro that follows the attribute.
-  * `@spec` — provides a typespec for the function that follows the attribute.
-  * `@behaviour` — (notice the British spelling) used for specifying an OTP or user-defined behaviour.
+- `@moduledoc` — provides documentation for the current module.
+- `@doc` — provides documentation for the function or macro that follows the attribute.
+- `@spec` — provides a typespec for the function that follows the attribute.
+- `@behaviour` — (notice the British spelling) used for specifying an OTP or user-defined behaviour.
 
 `@moduledoc` and `@doc` are by far the most used attributes, and we expect you to use them a lot. Elixir treats documentation as first-class and provides many functions to access documentation. We will cover them [in their own chapter](writing-documentation.md).
 
 Let's go back to the `Math` module defined in the previous chapters, add some documentation and save it to the `math.ex` file:
 
-```elixir
+```live-elixir
 defmodule Math do
   @moduledoc """
   Provides math-related functions.
@@ -70,7 +70,7 @@ You can take a look at the docs for `Module` for a complete list of supported at
 
 So far, we have seen how to define attributes, but how can read them? Let's see an example:
 
-```elixir
+```live-elixir
 defmodule MyServer do
   @service URI.parse("https://example.com")
   IO.inspect @service
@@ -83,7 +83,7 @@ end
 
 Trying to access an attribute that was not defined will print a warning:
 
-```elixir
+```live-elixir
 defmodule MyServer do
   @unknown
 end
@@ -92,7 +92,7 @@ warning: undefined module attribute @unknown, please remove access to @unknown o
 
 Attributes can also be read inside functions:
 
-```elixir
+```live-elixir
 defmodule MyApp.Status do
   @service URI.parse("https://example.com")
   def status(email) do
@@ -101,7 +101,7 @@ defmodule MyApp.Status do
 end
 ```
 
-The module attribute is defined at compilation time and its *return value*, not the function call itself, is what will be substituted in for the attribute. So the above will effectively compile to this:
+The module attribute is defined at compilation time and its _return value_, not the function call itself, is what will be substituted in for the attribute. So the above will effectively compile to this:
 
 ```elixir
 defmodule MyApp.Status do

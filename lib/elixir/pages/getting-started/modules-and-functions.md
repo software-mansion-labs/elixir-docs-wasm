@@ -2,14 +2,14 @@
 
 In Elixir we group several functions into modules. We've already used many different modules in the previous chapters, such as the `String` module:
 
-```elixir
+```live-elixir
 iex> String.length("hello")
 5
 ```
 
 In order to create our own modules in Elixir, we use the `defmodule` macro. The first letter of the module must be in uppercase. We use the `def` macro to define functions in that module. The first letter of every function must be in lowercase (or underscore):
 
-```elixir
+```live-elixir
 iex> defmodule Math do
 ...>   def sum(a, b) do
 ...>     a + b
@@ -26,7 +26,7 @@ In this chapter we will define our own modules, with different levels of complex
 
 Most of the time it is convenient to write modules into files so they can be compiled and reused. Let's assume we have a file named `math.ex` with the following contents:
 
-```elixir
+```live-elixir
 defmodule Math do
   def sum(a, b) do
     a + b
@@ -42,16 +42,16 @@ $ elixirc math.ex
 
 This will generate a file named `Elixir.Math.beam` containing the bytecode for the defined module. If we start `iex` again, our module definition will be available (provided that `iex` is started in the same directory the bytecode file is in):
 
-```elixir
+```live-elixir
 iex> Math.sum(1, 2)
 3
 ```
 
 Elixir projects are usually organized into three directories:
 
-  * `_build` - contains compilation artifacts
-  * `lib` - contains Elixir code (usually `.ex` files)
-  * `test` - contains tests (usually `.exs` files)
+- `_build` - contains compilation artifacts
+- `lib` - contains Elixir code (usually `.ex` files)
+- `test` - contains tests (usually `.exs` files)
 
 When working on actual projects, the build tool called `mix` will be responsible for compiling and setting up the proper paths for you. For learning and convenience purposes, Elixir also supports a scripting mode which is more flexible and does not generate any compiled artifacts.
 
@@ -61,7 +61,7 @@ In addition to the Elixir file extension `.ex`, Elixir also supports `.exs` file
 
 For instance, we can create a file called `math.exs`:
 
-```elixir
+```live-elixir
 defmodule Math do
   def sum(a, b) do
     a + b
@@ -83,7 +83,7 @@ Because we used `elixir` instead of `elixirc`, the module was compiled and loade
 
 Inside a module, we can define functions with `def/2` and private functions with `defp/2`. A function defined with `def/2` can be invoked from other modules while a private function can only be invoked locally.
 
-```elixir
+```live-elixir
 defmodule Math do
   def sum(a, b) do
     do_sum(a, b)
@@ -100,7 +100,7 @@ IO.puts Math.do_sum(1, 2) #=> ** (UndefinedFunctionError)
 
 Function declarations also support guards and multiple clauses. If a function has several clauses, Elixir will try each clause until it finds one that matches. Here is an implementation of a function that checks if the given number is zero or not:
 
-```elixir
+```live-elixir
 defmodule Math do
   def zero?(0) do
     true
@@ -123,7 +123,7 @@ Giving an argument that does not match any of the clauses raises an error.
 
 Similar to constructs like `if`, function definitions support both `do:` and `do`-block syntax, as [we learned in the previous chapter](keywords-and-maps.md#do-blocks-and-keywords). For example, we can edit `math.exs` to look like this:
 
-```elixir
+```live-elixir
 defmodule Math do
   def zero?(0), do: true
   def zero?(x) when is_integer(x), do: false
@@ -136,7 +136,7 @@ And it will provide the same behavior. You may use `do:` for one-liners but alwa
 
 Function definitions in Elixir also support default arguments:
 
-```elixir
+```live-elixir
 defmodule Concat do
   def join(a, b, sep \\ " ") do
     a <> sep <> b
@@ -149,7 +149,7 @@ IO.puts Concat.join("Hello", "world", "_") #=> Hello_world
 
 Any expression is allowed to serve as a default value, but it won't be evaluated during the function definition. Every time the function is invoked and any of its default values have to be used, the expression for that default value will be evaluated:
 
-```elixir
+```live-elixir
 defmodule DefaultTest do
   def dowork(x \\ "hello") do
     x
@@ -157,7 +157,7 @@ defmodule DefaultTest do
 end
 ```
 
-```elixir
+```live-elixir
 iex> DefaultTest.dowork()
 "hello"
 iex> DefaultTest.dowork(123)
@@ -168,7 +168,7 @@ iex> DefaultTest.dowork()
 
 If a function with default values has multiple clauses, it is required to create a function head (a function definition without a body) for declaring defaults:
 
-```elixir
+```live-elixir
 defmodule Concat do
   # A function head declaring defaults
   def join(a, b \\ nil, sep \\ " ")
@@ -191,7 +191,7 @@ When a variable is not used by a function or a clause, we add a leading undersco
 
 When using default values, one must be careful to avoid overlapping function definitions. Consider the following example:
 
-```elixir
+```live-elixir
 defmodule Concat do
   def join(a, b) do
     IO.puts "***First join"
@@ -218,13 +218,13 @@ The compiler is telling us that invoking the `join` function with two arguments 
 $ iex concat.ex
 ```
 
-```elixir
+```live-elixir
 iex> Concat.join "Hello", "world"
 ***First join
 "Helloworld"
 ```
 
-```elixir
+```live-elixir
 iex> Concat.join "Hello", "world", "_"
 ***Second join
 "Hello_world"

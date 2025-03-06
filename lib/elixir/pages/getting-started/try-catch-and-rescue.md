@@ -4,9 +4,9 @@ Elixir has three error mechanisms: errors, throws, and exits. In this chapter, w
 
 ## Errors
 
-Errors (or *exceptions*) are used when exceptional things happen in the code. A sample error can be retrieved by trying to add a number to an atom:
+Errors (or _exceptions_) are used when exceptional things happen in the code. A sample error can be retrieved by trying to add a number to an atom:
 
-```elixir
+```live-elixir
 iex> :foo + 1
 ** (ArithmeticError) bad argument in arithmetic expression
      :erlang.+(:foo, 1)
@@ -14,24 +14,24 @@ iex> :foo + 1
 
 A runtime error can be raised any time by using `raise/1`:
 
-```elixir
+```live-elixir
 iex> raise "oops"
 ** (RuntimeError) oops
 ```
 
 Other errors can be raised with `raise/2` passing the error name and a list of keyword arguments:
 
-```elixir
+```live-elixir
 iex> raise ArgumentError, message: "invalid argument foo"
 ** (ArgumentError) invalid argument foo
 ```
 
 You can also define your own errors by creating a module and using the `defexception/1` construct inside it. This way, you'll create an error with the same name as the module it's defined in. The most common case is to define a custom exception with a message field:
 
-```elixir
+```live-elixir
 iex> defmodule MyError do
-iex>   defexception message: "default message"
-iex> end
+...>   defexception message: "default message"
+...> end
 iex> raise MyError
 ** (MyError) default message
 iex> raise MyError, message: "custom message"
@@ -40,7 +40,7 @@ iex> raise MyError, message: "custom message"
 
 Errors can be **rescued** using the `try/rescue` construct:
 
-```elixir
+```live-elixir
 iex> try do
 ...>   raise "oops"
 ...> rescue
@@ -53,7 +53,7 @@ The example above rescues the runtime error and returns the exception itself, wh
 
 If you don't have any use for the exception, you don't have to pass a variable to `rescue`:
 
-```elixir
+```live-elixir
 iex> try do
 ...>   raise "oops"
 ...> rescue
@@ -82,7 +82,7 @@ iex> case File.read("hello") do
 ...> end
 ```
 
-For the cases where you do expect a file to exist (and the lack of that file is truly an *error*) you may use `File.read!/1`:
+For the cases where you do expect a file to exist (and the lack of that file is truly an _error_) you may use `File.read!/1`:
 
 ```elixir
 iex> File.read!("unknown")
@@ -96,15 +96,15 @@ Many functions in the standard library follow the pattern of having a counterpar
 
 ### Fail fast / Let it crash
 
-One saying that is common in the Erlang community, as well as Elixir's, is "fail fast" / "let it crash". The idea behind let it crash is that, in case something *unexpected* happens, it is best to let the exception happen, without rescuing it.
+One saying that is common in the Erlang community, as well as Elixir's, is "fail fast" / "let it crash". The idea behind let it crash is that, in case something _unexpected_ happens, it is best to let the exception happen, without rescuing it.
 
-It is important to emphasize the word *unexpected*. For example, imagine you are building a script to process files. Your script receives filenames as inputs. It is expected that users may make mistakes and provide unknown filenames. In this scenario, while you could use `File.read!/1` to read files and let it crash in case of invalid filenames, it probably makes more sense to use `File.read/1` and provide users of your script with a clear and precise feedback of what went wrong.
+It is important to emphasize the word _unexpected_. For example, imagine you are building a script to process files. Your script receives filenames as inputs. It is expected that users may make mistakes and provide unknown filenames. In this scenario, while you could use `File.read!/1` to read files and let it crash in case of invalid filenames, it probably makes more sense to use `File.read/1` and provide users of your script with a clear and precise feedback of what went wrong.
 
 Other times, you may fully expect a certain file to exist, and in case it does not, it means something terribly wrong has happened elsewhere. In such cases, `File.read!/1` is all you need.
 
 The second approach also works because, as discussed in the [Processes](processes.md) chapter, all Elixir code runs inside processes that are isolated and don't share anything by default. Therefore, an unhandled exception in a process will never crash or corrupt the state of another process. This allows us to define supervisor processes, which are meant to observe when a process terminates unexpectedly, and start a new one in its place.
 
-At the end of the day, "fail fast" / "let it crash" is a way of saying that, when *something unexpected* happens, it is best to start from scratch within a new process, freshly started by a supervisor, rather than blindly trying to rescue all possible error cases without the full context of when and how they can happen.
+At the end of the day, "fail fast" / "let it crash" is a way of saying that, when _something unexpected_ happens, it is best to start from scratch within a new process, freshly started by a supervisor, rather than blindly trying to rescue all possible error cases without the full context of when and how they can happen.
 
 ### Reraise
 
@@ -122,7 +122,7 @@ end
 
 In the example above, we rescued the exception, logged it, and then re-raised it. We use the `__STACKTRACE__` construct both when formatting the exception and when re-raising. This ensures we reraise the exception as is, without changing value or its origin.
 
-Generally speaking, we take errors in Elixir literally: they are reserved for unexpected and/or exceptional situations, never for controlling the flow of our code. In case you actually need flow control constructs, *throws* should be used. That's what we are going to see next.
+Generally speaking, we take errors in Elixir literally: they are reserved for unexpected and/or exceptional situations, never for controlling the flow of our code. In case you actually need flow control constructs, _throws_ should be used. That's what we are going to see next.
 
 ## Throws
 
@@ -130,7 +130,7 @@ In Elixir, a value can be thrown and later be caught. `throw` and `catch` are re
 
 Those situations are quite uncommon in practice except when interfacing with libraries that do not provide a proper API. For example, let's imagine the `Enum` module did not provide any API for finding a value and that we needed to find the first multiple of 13 in a list of numbers:
 
-```elixir
+```live-elixir
 iex> try do
 ...>   Enum.each(-50..50, fn x ->
 ...>     if rem(x, 13) == 0, do: throw(x)
@@ -142,9 +142,9 @@ iex> try do
 "Got -39"
 ```
 
-Since `Enum` *does* provide a proper API, in practice `Enum.find/2` is the way to go:
+Since `Enum` _does_ provide a proper API, in practice `Enum.find/2` is the way to go:
 
-```elixir
+```live-elixir
 iex> Enum.find(-50..50, &(rem(&1, 13) == 0))
 -39
 ```
@@ -153,7 +153,7 @@ iex> Enum.find(-50..50, &(rem(&1, 13) == 0))
 
 All Elixir code runs inside processes that communicate with each other. When a process dies of "natural causes" (e.g., unhandled exceptions), it sends an `exit` signal. A process can also die by explicitly sending an `exit` signal:
 
-```elixir
+```live-elixir
 iex> spawn_link(fn -> exit(1) end)
 ** (EXIT from #PID<0.56.0>) shell process exited with reason: 1
 ```
@@ -162,7 +162,7 @@ In the example above, the linked process died by sending an `exit` signal with a
 
 `exit` can also be "caught" using `try/catch`:
 
-```elixir
+```live-elixir
 iex> try do
 ...>   exit("I am exiting")
 ...> catch
@@ -173,7 +173,7 @@ iex> try do
 
 `catch` can also be used within a function body without a matching `try`.
 
-```elixir
+```live-elixir
 defmodule Example do
   def matched_catch do
     exit(:timeout)
@@ -219,7 +219,7 @@ this process will exit and the `after` clause will not get run. Thus `after` pro
 
 Sometimes you may want to wrap the entire body of a function in a `try` construct, often to guarantee some code will be executed afterwards. In such cases, Elixir allows you to omit the `try` line:
 
-```elixir
+```live-elixir
 iex> defmodule RunAfter do
 ...>   def without_even_trying do
 ...>     raise "oops"
@@ -238,7 +238,7 @@ Elixir will automatically wrap the function body in a `try` whenever one of `aft
 
 If an `else` block is present, it will match on the results of the `try` block whenever the `try` block finishes without a throw or an error.
 
-```elixir
+```live-elixir
 iex> x = 2
 2
 iex> try do
@@ -261,7 +261,7 @@ Exceptions in the `else` block are not caught. If no pattern inside the `else` b
 
 Similar to `case`, `cond`, `if` and other constructs in Elixir, variables defined inside `try/catch/rescue/after` blocks do not leak to the outer context. In other words, this code is invalid:
 
-```elixir
+```live-elixir
 iex> try do
 ...>   raise "fail"
 ...>   what_happened = :did_not_raise
@@ -274,7 +274,7 @@ iex> what_happened
 
 Instead, you should return the value of the `try` expression:
 
-```elixir
+```live-elixir
 iex> what_happened =
 ...>   try do
 ...>     raise "fail"
@@ -288,7 +288,7 @@ iex> what_happened
 
 Furthermore, variables defined in the do-block of `try` are not available inside `rescue/after/else` either. This is because the `try` block may fail at any moment and therefore the variables may have never been bound in the first place. So this also isn't valid:
 
-```elixir
+```live-elixir
 iex> try do
 ...>   raise "fail"
 ...>   another_what_happened = :did_not_raise

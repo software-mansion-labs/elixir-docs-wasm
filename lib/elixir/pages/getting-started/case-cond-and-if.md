@@ -6,7 +6,7 @@ In this chapter, we will learn about the `case`, `cond`, and `if` control flow s
 
 `case` allows us to compare a value against many patterns until we find a matching one:
 
-```elixir
+```live-elixir
 iex> case {1, 2, 3} do
 ...>   {4, 5, 6} ->
 ...>     "This clause won't match"
@@ -20,7 +20,7 @@ iex> case {1, 2, 3} do
 
 If you want to pattern match against an existing variable, you need to use the `^` operator:
 
-```elixir
+```live-elixir
 iex> x = 1
 1
 iex> case 10 do
@@ -32,7 +32,7 @@ iex> case 10 do
 
 Clauses also allow extra conditions to be specified via guards:
 
-```elixir
+```live-elixir
 iex> case {1, 2, 3} do
 ...>   {1, x, 3} when x > 0 ->
 ...>     "Will match"
@@ -46,7 +46,7 @@ The first clause above will only match when `x` is positive.
 
 Keep in mind errors in guards do not leak but simply make the guard fail:
 
-```elixir
+```live-elixir
 iex> hd(1)
 ** (ArgumentError) argument error
 iex> case 1 do
@@ -58,7 +58,7 @@ iex> case 1 do
 
 If none of the clauses match, an error is raised:
 
-```elixir
+```live-elixir
 iex> case :ok do
 ...>   :error -> "Won't match"
 ...> end
@@ -71,7 +71,7 @@ The documentation for the `Kernel` module lists all available guards in its side
 
 `case` builds on pattern matching and guards to destructure and match on certain conditions. However, patterns and guards are limited only to certain expressions which are optimized by the compiler. In many situations, you need to write conditions that go beyond what can be expressed with `case`. For those, `if/2` (and `unless/2`) are useful alternatives:
 
-```elixir
+```live-elixir
 iex> if true do
 ...>   "This works!"
 ...> end
@@ -86,7 +86,7 @@ If the condition given to `if/2` returns `false` or `nil`, the body given betwee
 
 They also support `else` blocks (although using `else` with `unless` is generally discouraged):
 
-```elixir
+```live-elixir
 iex> if nil do
 ...>   "This won't be seen"
 ...> else
@@ -97,7 +97,7 @@ iex> if nil do
 
 This is also a good opportunity to talk about variable scoping in Elixir. If any variable is declared or changed inside `if`, `case`, and similar constructs, the declaration and change will only be visible inside the construct. For example:
 
-```elixir
+```live-elixir
 iex> x = 1
 1
 iex> if true do
@@ -110,7 +110,7 @@ iex> x
 
 In said cases, if you want to change a value, you must return the value from the `if`:
 
-```elixir
+```live-elixir
 iex> x = 1
 1
 iex> x = if true do
@@ -131,7 +131,7 @@ If you find yourself nesting several `if/2` blocks, you may want to consider usi
 
 If you need to check across several conditions and find the first one that does not evaluate to `nil` or `false`, `cond/1` is a useful construct:
 
-```elixir
+```live-elixir
 iex> cond do
 ...>   2 + 2 == 5 ->
 ...>     "This will not be true"
@@ -147,7 +147,7 @@ This is equivalent to `else if` clauses in many imperative languages - although 
 
 If all of the conditions return `nil` or `false`, an error (`CondClauseError`) is raised. For this reason, it may be necessary to add a final condition, equal to `true`, which will always match:
 
-```elixir
+```live-elixir
 iex> cond do
 ...>   2 + 2 == 5 ->
 ...>     "This is never true"
@@ -161,7 +161,7 @@ iex> cond do
 
 Similar to `if/2` and `unless/2`, `cond` considers any value besides `nil` and `false` to be true:
 
-```elixir
+```live-elixir
 iex> cond do
 ...>   hd([1, 2, 3]) ->
 ...>     "1 is considered as true"

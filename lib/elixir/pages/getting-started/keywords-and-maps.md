@@ -8,28 +8,28 @@ In Elixir, we have two main associative data structures: keyword lists and maps.
 
 Keyword lists are a data-structure used to pass options to functions. Imagine you want to split a string of numbers. We can use `String.split/2`:
 
-```elixir
+```live-elixir
 iex> String.split("1 2 3", " ")
 ["1", "2", "3"]
 ```
 
 However, what happens if there is an additional space between the numbers:
 
-```elixir
+```live-elixir
 iex> String.split("1  2  3", " ")
 ["1", "", "2", "", "3"]
 ```
 
 As you can see, there are now empty strings in our results. Luckily, the `String.split/3` function allows the `trim` option to be set to true:
 
-```elixir
+```live-elixir
 iex> String.split("1  2  3", " ", [trim: true])
 ["1", "2", "3"]
 ```
 
 `[trim: true]` is a keyword list. Furthermore, when a keyword list is the last argument of a function, we can skip the brackets and write:
 
-```elixir
+```live-elixir
 iex> String.split("1  2  3", " ", trim: true)
 ["1", "2", "3"]
 ```
@@ -38,14 +38,14 @@ As shown in the example above, keyword lists are mostly used as optional argumen
 
 As the name implies, keyword lists are simply lists. In particular, they are lists consisting of 2-item tuples where the first element (the key) is an atom and the second element can be any value. Both representations are the same:
 
-```elixir
+```live-elixir
 iex> [{:trim, true}] == [trim: true]
 true
 ```
 
 Since keyword lists are lists, we can use all operations available to lists. For example, we can use `++` to add new values to a keyword list:
 
-```elixir
+```live-elixir
 iex> list = [a: 1, b: 2]
 [a: 1, b: 2]
 iex> list ++ [c: 3]
@@ -56,7 +56,7 @@ iex> [a: 0] ++ list
 
 You can read the value of a keyword list using the brackets syntax. This is also known as the access syntax, as it is defined by the `Access` module:
 
-```elixir
+```live-elixir
 iex> list[:a]
 1
 iex> list[:b]
@@ -65,7 +65,7 @@ iex> list[:b]
 
 In case of duplicate keys, values added to the front are the ones fetched:
 
-```elixir
+```live-elixir
 iex> new_list = [a: 0] ++ list
 [a: 0, a: 1, b: 2]
 iex> new_list[:a]
@@ -74,13 +74,13 @@ iex> new_list[:a]
 
 Keyword lists are important because they have three special characteristics:
 
-  * Keys must be atoms.
-  * Keys are ordered, as specified by the developer.
-  * Keys can be given more than once.
+- Keys must be atoms.
+- Keys are ordered, as specified by the developer.
+- Keys can be given more than once.
 
 For example, [the Ecto library](https://github.com/elixir-lang/ecto) makes use of these features to provide an elegant DSL for writing database queries:
 
-```elixir
+```live-elixir
 query =
   from w in Weather,
     where: w.prcp > 0,
@@ -90,7 +90,7 @@ query =
 
 Although we can pattern match on keyword lists, it is not done in practice since pattern matching on lists requires the number of items and their order to match:
 
-```elixir
+```live-elixir
 iex> [a: a] = [a: 1]
 [a: 1]
 iex> a
@@ -109,7 +109,7 @@ In order to manipulate keyword lists, Elixir provides the `Keyword` module. Reme
 
 As we have seen, keywords are mostly used in the language to pass optional values. In fact, we have used keywords in earlier chapters. For example, we have seen:
 
-```elixir
+```live-elixir
 iex> if true do
 ...>   "This will be seen"
 ...> else
@@ -120,7 +120,7 @@ iex> if true do
 
 It happens that `do` blocks are nothing more than a syntax convenience on top of keywords. We can rewrite the above to:
 
-```elixir
+```live-elixir
 iex> if true, do: "This will be seen", else: "This won't"
 "This will be seen"
 ```
@@ -135,7 +135,7 @@ With this out of the way, let's talk about maps.
 
 Whenever you need to store key-value pairs, maps are the "go to" data structure in Elixir. A map is created using the `%{}` syntax:
 
-```elixir
+```live-elixir
 iex> map = %{:a => 1, 2 => :b}
 %{2 => :b, :a => 1}
 iex> map[:a]
@@ -148,12 +148,12 @@ nil
 
 Compared to keyword lists, we can already see two differences:
 
-  * Maps allow any value as a key.
-  * Maps' keys do not follow any ordering.
+- Maps allow any value as a key.
+- Maps' keys do not follow any ordering.
 
 In contrast to keyword lists, maps are very useful with pattern matching. When a map is used in a pattern, it will always match on a subset of the given value:
 
-```elixir
+```live-elixir
 iex> %{} = %{:a => 1, 2 => :b}
 %{2 => :b, :a => 1}
 iex> %{:a => a} = %{:a => 1, 2 => :b}
@@ -168,7 +168,7 @@ As shown above, a map matches as long as the keys in the pattern exist in the gi
 
 The `Map` module provides a very similar API to the `Keyword` module with convenience functions to add, remove, and update maps keys:
 
-```elixir
+```live-elixir
 iex> Map.get(%{:a => 1, 2 => :b}, :a)
 1
 iex> Map.put(%{:a => 1, 2 => :b}, :c, 3)
@@ -183,7 +183,7 @@ In the previous section, we have used maps as a key-value data structure where k
 
 We define such maps using the same syntax as in the previous section, except that all keys must be atoms:
 
-```elixir
+```live-elixir
 iex> map = %{:name => "John", :age => 23}
 %{name: "John", age: 23}
 ```
@@ -192,7 +192,7 @@ As you can see from the printed result above, Elixir also allows you to write ma
 
 When the keys are atoms, in particular when working with maps of predefined keys, we can also access them using the `map.key` syntax:
 
-```elixir
+```live-elixir
 iex> map = %{name: "John", age: 23}
 %{name: "John", age: 23}
 
@@ -204,7 +204,7 @@ iex> map.agee
 
 There is also syntax for updating keys, which also raises if the key has not yet been defined:
 
-```elixir
+```live-elixir
 iex> %{map | name: "Mary"}
 %{name: "Mary", age: 23}
 iex> %{map | agee: 27}
@@ -221,7 +221,7 @@ Often we will have maps inside maps, or even keywords lists inside maps, and so 
 
 Imagine you have the following structure:
 
-```elixir
+```live-elixir
 iex> users = [
   john: %{name: "John", age: 27, languages: ["Erlang", "Ruby", "Elixir"]},
   mary: %{name: "Mary", age: 29, languages: ["Elixir", "F#", "Clojure"]}
@@ -234,14 +234,14 @@ iex> users = [
 
 We have a keyword list of users where each value is a map containing the name, age and a list of programming languages each user likes. If we wanted to access the age for john, we could write:
 
-```elixir
+```live-elixir
 iex> users[:john].age
 27
 ```
 
 It happens we can also use this same syntax for updating the value:
 
-```elixir
+```live-elixir
 iex> users = put_in users[:john].age, 31
 [
   john: %{age: 31, languages: ["Erlang", "Ruby", "Elixir"], name: "John"},
@@ -251,7 +251,7 @@ iex> users = put_in users[:john].age, 31
 
 The `update_in/2` macro is similar but allows us to pass a function that controls how the value changes. For example, let's remove "Clojure" from Mary's list of languages:
 
-```elixir
+```live-elixir
 iex> users = update_in users[:mary].languages, fn languages -> List.delete(languages, "Clojure") end
 [
   john: %{age: 31, languages: ["Erlang", "Ruby", "Elixir"], name: "John"},
@@ -267,10 +267,10 @@ There are two different data structures for working with key-value stores in Eli
 
 As we conclude this chapter, remember that you should:
 
-  * Use keyword lists for passing optional values to functions
+- Use keyword lists for passing optional values to functions
 
-  * Use maps for general key-value data structures
+- Use maps for general key-value data structures
 
-  * Use maps when working with data that has a predefined set of keys
+- Use maps when working with data that has a predefined set of keys
 
 Now let's talk about modules and functions.

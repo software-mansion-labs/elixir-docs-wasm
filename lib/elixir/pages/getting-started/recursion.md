@@ -14,7 +14,7 @@ for(i = 0; i < sizeof(array); i++) {
 
 In the example above, we are mutating both the array and the variable `i`. However, data structures in Elixir are immutable. For this reason, functional languages rely on recursion: a function is called recursively until a condition is reached that stops the recursive action from continuing. No data is mutated in this process. Consider the example below that prints a string an arbitrary number of times:
 
-```elixir
+```live-elixir
 defmodule Recursion do
   def print_multiple_times(msg, n) when n > 0 do
     IO.puts(msg)
@@ -45,7 +45,7 @@ When the second argument is zero, the guard `n > 0` evaluates to false, and the 
 
 Finally, if you pass an argument that does not match any clause, Elixir raises a `FunctionClauseError`:
 
-```elixir
+```live-elixir
 iex> Recursion.print_multiple_times "Hello!", -1
 ** (FunctionClauseError) no function clause matching in Recursion.print_multiple_times/2
 
@@ -64,7 +64,7 @@ iex> Recursion.print_multiple_times "Hello!", -1
 
 Let's now see how we can use the power of recursion to sum a list of numbers:
 
-```elixir
+```live-elixir
 defmodule Math do
   def sum_list([head | tail], accumulator) do
     sum_list(tail, head + accumulator)
@@ -82,7 +82,7 @@ We invoke `sum_list` with the list `[1, 2, 3]` and the initial value `0` as argu
 
 Then, we add the head of the list to the accumulator `head + accumulator` and call `sum_list` again, recursively, passing the tail of the list as its first argument. The tail will once again match `[head | tail]` until the list is empty, as seen below:
 
-```elixir
+```live-elixir
 sum_list [1, 2, 3], 0
 sum_list [2, 3], 1
 sum_list [3], 3
@@ -95,7 +95,7 @@ The process of taking a list and _reducing_ it down to one value is known as a _
 
 What if we instead want to double all of the values in our list?
 
-```elixir
+```live-elixir
 defmodule Math do
   def double_each([head | tail]) do
     [head * 2 | double_each(tail)]
@@ -111,7 +111,7 @@ end
 $ iex math.exs
 ```
 
-```elixir
+```live-elixir
 iex> Math.double_each([1, 2, 3]) #=> [2, 4, 6]
 ```
 
@@ -121,7 +121,7 @@ Recursion and [tail call](https://en.wikipedia.org/wiki/Tail_call) optimization 
 
 The `Enum` module, which we're going to see in the next chapter already provides many conveniences for working with lists. For instance, the examples above could be written as:
 
-```elixir
+```live-elixir
 iex> Enum.reduce([1, 2, 3], 0, fn x, acc -> x + acc end)
 6
 iex> Enum.map([1, 2, 3], fn x -> x * 2 end)
@@ -130,7 +130,7 @@ iex> Enum.map([1, 2, 3], fn x -> x * 2 end)
 
 Or, using the capture syntax:
 
-```elixir
+```live-elixir
 iex> Enum.reduce([1, 2, 3], 0, &+/2)
 6
 iex> Enum.map([1, 2, 3], &(&1 * 2))

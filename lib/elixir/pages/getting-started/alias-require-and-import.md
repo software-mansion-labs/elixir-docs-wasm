@@ -16,7 +16,7 @@ import Foo
 use Foo
 ```
 
-We are going to explore them in detail now. Keep in mind the first three are called directives because they have *lexical scope*, while `use` is a common extension point that allows the used module to inject code.
+We are going to explore them in detail now. Keep in mind the first three are called directives because they have _lexical scope_, while `use` is a common extension point that allows the used module to inject code.
 
 ## alias
 
@@ -47,7 +47,7 @@ Is the same as:
 alias Math.List, as: List
 ```
 
-Note that `alias` is *lexically scoped*, which allows you to set aliases inside specific functions:
+Note that `alias` is _lexically scoped_, which allows you to set aliases inside specific functions:
 
 ```elixir
 defmodule Math do
@@ -70,7 +70,7 @@ Elixir provides macros as a mechanism for meta-programming (writing code that ge
 
 Public functions in modules are globally available, but in order to use macros, you need to opt-in by requiring the module they are defined in.
 
-```elixir
+```live-elixir
 iex> Integer.is_odd(3)
 ** (UndefinedFunctionError) function Integer.is_odd/1 is undefined or private. However, there is a macro with the same name and arity. Be sure to require Integer if you intend to invoke this macro
     (elixir) Integer.is_odd(3)
@@ -90,7 +90,7 @@ We use `import` whenever we want to access functions or macros from other module
 
 For example, if we want to use the `duplicate/2` function from the `List` module several times, we can import it:
 
-```elixir
+```live-elixir
 iex> import List, only: [duplicate: 2]
 List
 iex> duplicate(:ok, 3)
@@ -99,9 +99,9 @@ iex> duplicate(:ok, 3)
 
 We imported only the function `duplicate` (with arity 2) from `List`. Although `:only` is optional, its usage is recommended in order to avoid importing all the functions of a given module inside the current scope. `:except` could also be given as an option in order to import everything in a module except a list of functions.
 
-Note that `import` is *lexically scoped* too. This means that we can import specific macros or functions inside function definitions:
+Note that `import` is _lexically scoped_ too. This means that we can import specific macros or functions inside function definitions:
 
-```elixir
+```live-elixir
 defmodule Math do
   def some_function do
     import List, only: [duplicate: 2]
@@ -116,7 +116,7 @@ While `import`s can be a useful for frameworks and libraries to build abstractio
 
 ## use
 
-The `use` macro is frequently used as an extension point. This means that, when you `use` a module `FooBar`, you allow that module to inject *any* code in the current module, such as importing itself or other modules, defining new functions, setting a module state, etc.
+The `use` macro is frequently used as an extension point. This means that, when you `use` a module `FooBar`, you allow that module to inject _any_ code in the current module, such as importing itself or other modules, defining new functions, setting a module state, etc.
 
 For example, in order to write tests using the ExUnit framework, a developer should use the `ExUnit.Case` module:
 
@@ -157,7 +157,7 @@ At this point, you may be wondering: what exactly is an Elixir alias and how is 
 
 An alias in Elixir is a capitalized identifier (like `String`, `Keyword`, etc) which is converted to an atom during compilation. For instance, the `String` alias translates by default to the atom `:"Elixir.String"`:
 
-```elixir
+```live-elixir
 iex> is_atom(String)
 true
 iex> to_string(String)
@@ -170,7 +170,7 @@ By using the `alias/2` directive, we are changing the atom the alias expands to.
 
 Aliases expand to atoms because in the Erlang Virtual Machine (and consequently Elixir) modules are always represented by atoms:
 
-```elixir
+```live-elixir
 iex> List.flatten([1, [2], 3])
 [1, 2, 3]
 iex> :"Elixir.List".flatten([1, [2], 3])
@@ -179,7 +179,7 @@ iex> :"Elixir.List".flatten([1, [2], 3])
 
 That's the mechanism we use to call Erlang modules:
 
-```elixir
+```live-elixir
 iex> :lists.flatten([1, [2], 3])
 [1, 2, 3]
 ```
@@ -188,7 +188,7 @@ iex> :lists.flatten([1, [2], 3])
 
 Now that we have talked about aliases, we can talk about nesting and how it works in Elixir. Consider the following example:
 
-```elixir
+```live-elixir
 defmodule Foo do
   defmodule Bar do
   end
@@ -201,7 +201,7 @@ If, later, the `Bar` module is moved outside the `Foo` module definition, it mus
 
 **Note**: in Elixir, you don't have to define the `Foo` module before being able to define the `Foo.Bar` module, as they are effectively independent. The above could also be written as:
 
-```elixir
+```live-elixir
 defmodule Foo.Bar do
 end
 
@@ -213,7 +213,7 @@ end
 
 Aliasing a nested module does not bring parent modules into scope. Consider the following example:
 
-```elixir
+```live-elixir
 defmodule Foo do
   defmodule Bar do
     defmodule Baz do

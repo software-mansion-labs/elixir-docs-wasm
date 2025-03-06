@@ -10,7 +10,7 @@ In this chapter, we will learn about the basic constructs for spawning new proce
 
 The basic mechanism for spawning new processes is the auto-imported `spawn/1` function:
 
-```elixir
+```live-elixir
 iex> spawn(fn -> 1 + 2 end)
 #PID<0.43.0>
 ```
@@ -19,7 +19,7 @@ iex> spawn(fn -> 1 + 2 end)
 
 Notice `spawn/1` returns a PID (process identifier). At this point, the process you spawned is very likely dead. The spawned process will execute the given function and exit after the function is done:
 
-```elixir
+```live-elixir
 iex> pid = spawn(fn -> 1 + 2 end)
 #PID<0.44.0>
 iex> Process.alive?(pid)
@@ -30,7 +30,7 @@ false
 
 We can retrieve the PID of the current process by calling `self/0`:
 
-```elixir
+```live-elixir
 iex> self()
 #PID<0.41.0>
 iex> Process.alive?(self())
@@ -43,7 +43,7 @@ Processes get much more interesting when we are able to send and receive message
 
 We can send messages to a process with `send/2` and receive them with `receive/1`:
 
-```elixir
+```live-elixir
 iex> send(self(), {:hello, "world"})
 {:hello, "world"}
 iex> receive do
@@ -59,7 +59,7 @@ The process that sends the message does not block on `send/2`, it puts the messa
 
 If there is no message in the mailbox matching any of the patterns, the current process will wait until a matching message arrives. A timeout can also be specified:
 
-```elixir
+```live-elixir
 iex> receive do
 ...>   {:hello, msg}  -> msg
 ...> after
@@ -72,7 +72,7 @@ A timeout of 0 can be given when you already expect the message to be in the mai
 
 Let's put it all together and send messages between processes:
 
-```elixir
+```live-elixir
 iex> parent = self()
 #PID<0.41.0>
 iex> spawn(fn -> send(parent, {:hello, self()}) end)
@@ -99,7 +99,7 @@ iex> flush()
 
 The majority of times we spawn processes in Elixir, we spawn them as linked processes. Before we show an example with `spawn_link/1`, let's see what happens when a process started with `spawn/1` fails:
 
-```elixir
+```live-elixir
 iex> spawn(fn -> raise "oops" end)
 #PID<0.58.0>
 
@@ -110,7 +110,7 @@ iex> spawn(fn -> raise "oops" end)
 
 It merely logged an error but the parent process is still running. That's because processes are isolated. If we want the failure in one process to propagate to another one, we should link them. This can be done with `spawn_link/1`:
 
-```elixir
+```live-elixir
 iex> self()
 #PID<0.41.0>
 iex> spawn_link(fn -> raise "oops" end)
@@ -138,7 +138,7 @@ While other languages would require us to catch/handle exceptions, in Elixir we 
 
 Tasks build on top of the spawn functions to provide better error reports and introspection:
 
-```elixir
+```live-elixir
 iex> Task.start(fn -> raise "oops" end)
 {:ok, #PID<0.55.0>}
 
@@ -161,7 +161,7 @@ We haven't talked about state so far. If you are building an application that re
 
 Processes are the most common answer to this question. We can write processes that loop infinitely, maintain state, and send and receive messages. As an example, let's write a module that starts new processes that work as a key-value store in a file named `kv.exs`:
 
-```elixir
+```live-elixir
 defmodule KV do
   def start_link do
     Task.start_link(fn -> loop(%{}) end)
@@ -182,6 +182,8 @@ end
 Note that the `start_link` function starts a new process that runs the `loop/1` function, starting with an empty map. The `loop/1` (private) function then waits for messages and performs the appropriate action for each message. We made `loop/1` private by using `defp` instead of `def`. In the case of a `:get` message, it sends a message back to the caller and calls `loop/1` again, to wait for a new message. While the `:put` message actually invokes `loop/1` with a new version of the map, with the given `key` and `value` stored.
 
 Let's give it a try by running `iex kv.exs`:
+
+<!-- TODO-SWM: flush() -->
 
 ```elixir
 iex> {:ok, pid} = KV.start_link()
@@ -221,7 +223,7 @@ iex> flush()
 
 Using processes to maintain state and name registration are very common patterns in Elixir applications. However, most of the time, we won't implement those patterns manually as above, but by using one of the many abstractions that ship with Elixir. For example, Elixir provides `Agent`s, which are simple abstractions around state. Our code above could be directly written as:
 
-```elixir
+```live-elixir
 iex> {:ok, pid} = Agent.start_link(fn -> %{} end)
 {:ok, #PID<0.72.0>}
 iex> Agent.update(pid, fn map -> Map.put(map, :hello, :world) end)
