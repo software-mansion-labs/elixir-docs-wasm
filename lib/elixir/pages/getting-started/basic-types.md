@@ -2,7 +2,7 @@
 
 In this chapter we will learn more about Elixir basic types: integers, floats, booleans, atoms, and strings. Other data types, such as lists and tuples, will be explored in the next chapter.
 
-```elixir
+```live-elixir
 iex> 1          # integer
 iex> 0x1F       # integer
 iex> 1.0        # float
@@ -254,8 +254,8 @@ You can print a string using the `IO.puts/1` function from the `IO` module:
 
 ```live-elixir
 iex> IO.puts("hello\nworld")
-hello
-world
+# hello
+# world
 :ok
 ```
 
